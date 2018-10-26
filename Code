@@ -1,0 +1,55 @@
+
+#Finding Temperature Distribution of the rod of length 1 m when it reaches steady state.
+#Given K=200W/mK,alpha=1.88*1e-5 m^2/sec
+#Boundary conditions- T(x,0)=T0=25 deg.Celsius,T(0,t)=Tc=0 deg.Celsius,T(L,t)=Th=600 deg.Celsius
+# No od nodes=25
+
+
+# Solution
+#Step 1:Finding stable condition
+import numpy as np
+import math as m
+l=1
+alpha=1.88*1e-5
+n=25
+initial_temp=25
+delta_x=l/(n-1)
+delta_t=(0.5*delta_x**2)/alpha
+Temp_at_X0=0
+Temp_at_XL=600
+print(delta_t)
+t=[3,3]
+f=[3,4]
+
+
+## Taking time steps =1 sec
+delta_t1=1
+beta=(alpha*delta_t1)/(delta_x**2)
+Temp=np.zeros((2,n))
+Temp[0,:]=initial_temp
+np.append(Temp,np.zeros((1,n)))
+another_row=np.zeros((1,n))
+for i in range(100000):
+    for j in range(len(Temp.T)):
+        if j==0:
+            Temp[i+1,j]=Temp_at_X0
+        elif j==len(Temp.T)-1:
+            Temp[i+1,j]=Temp_at_XL
+        else:
+            Temp[i+1,j]=beta*Temp[i,j-1]+(1-2*beta)*Temp[i,j]+beta*Temp[i,j+1]
+    if np.allclose(Temp[i+1],Temp[i],1e-4):
+        print("The time after which the steady state is achieved at a threshold of 1e-4 is :"+str(i)+'sec or '+str(i/60)+' min')
+        break
+    else:
+        Temp=np.concatenate((Temp,another_row))
+        
+    
+from matplotlib import pyplot as plt
+plt.plot(np.arange(len(Temp)),Temp[:,[1,6,13,17,18,19,21,22,23]])
+
+plt.legend(['T2','T7','T14','T18','T19','T20','T22','T23','T24'],bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+plt.xlabel('Time in sec')
+plt.ylabel('Temperature in degree Celsius')
+plt.title('Temperature distribution with time')
+
+    
