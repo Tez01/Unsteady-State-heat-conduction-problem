@@ -1,4 +1,4 @@
-# Unsteady-State-heat-conduction-problem
+# Unsteady-State-heat-conduction-problem (Implemented in Python)
 Finite Difference Method-Unsteady state heat conduction in 1D Rod
 
 Problem Statement-Finding Temperature Distribution of the rod of length 1 m when it reaches steady state.
